@@ -38,12 +38,14 @@ body {
 
 .custom-scrollbar {
   &::-webkit-scrollbar-track {
+    width: 4px;
     background-color: transparent;
+    border-radius: 0;
     margin: 0px;
   }
   &::-webkit-scrollbar-thumb {
     border-radius: none;
-    background-color: var(--color-primary);
+    background-color: #e3b38f;
   }
 }
 
