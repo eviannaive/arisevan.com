@@ -10,7 +10,7 @@ export default function DashboardLayout({
       </header>
       <main className="py-8">{children}</main>
       <footer className="py-6 border-t">
-        <p>© 2025 My Company</p>
+        <p>© 2025 Arisevan</p>
       </footer>
     </div>
   );
