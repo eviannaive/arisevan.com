@@ -70,12 +70,12 @@ export default function RootLayout({
                   ▶
                 </button>
               </div>
-              <div className="w-16 bg-gray-300 px-1 pt-1 shrink-0 relative z-10">
+              <div className="w-16 bg-gray-300 px-0.5 pt-0.5 shrink-0 relative z-10">
                 <div className="w-full grid grid-cols-1">
                   {data_menu.map((d, index) => (
                     <label
                       key={index}
-                      className="w-full p-2 bg-gray-100/60 grid place-content-center cursor-pointer  border-4 border-gray-300 hover:border-primary-800/80 hover:bg-white has-checked:bg-white"
+                      className="w-full p-2 bg-gray-100/60 grid place-content-center cursor-pointer  border-2 border-gray-300 hover:border-primary-800/80 hover:bg-white has-checked:bg-white"
                       onMouseEnter={() => {
                         setShowBreadCrumb(false);
                         setHoverTextMain(`${d.label}`);
@@ -91,9 +91,6 @@ export default function RootLayout({
                         className="hidden"
                         name="main"
                         value={d.label}
-                        onClick={() => {
-                          setBreadCrumb(`${d.label}`);
-                        }}
                       ></input>
                     </label>
                   ))}
