@@ -3,9 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --header-height: 240px;
-  --header-height-scroll: 85px;
-  --content-height: calc(100vh - var(--haader-height-scroll));
+  --header-height: 85px;
+  --content-height: calc(100vh - var(--haader-height));
   --menu-width: 300px;
 }
 
