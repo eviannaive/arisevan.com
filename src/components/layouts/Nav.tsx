@@ -2,7 +2,7 @@
 import { useRef, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
-import splitText from "@/utils/splitText";
+import splitText from "@/lib/splitText";
 
 export default function Nav() {
   const wrapRef = useRef<HTMLDivElement>(null);
