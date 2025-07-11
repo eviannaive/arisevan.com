@@ -7,7 +7,7 @@ export default function Page() {
       username,
       password,
     };
-    const data = await fetch("/api/login", {
+    const data = await fetch("/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,10 +18,18 @@ export default function Page() {
   };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form action={handleSubmit} className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">Login</h2>
+      <form
+        action={handleSubmit}
+        className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
+      >
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
+          Login
+        </h2>
         <div className="mb-4">
-          <label htmlFor="username" className="mb-2 block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="username"
+            className="mb-2 block text-sm font-medium text-gray-700"
+          >
             Username
           </label>
           <input
@@ -33,7 +41,10 @@ export default function Page() {
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="mb-2 block text-sm font-medium text-gray-700"
+          >
             Password
           </label>
           <input
