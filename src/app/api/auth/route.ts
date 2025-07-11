@@ -41,10 +41,18 @@ export async function POST(req: Request) {
         JWT_SECRET,
         { expiresIn: JWT_EXPIRES },
       );
-      return NextResponse.json(
-        { message: "login seccess", token },
-        { status: 200 },
-      );
+
+      const response = NextResponse.json({ message: "login success" });
+
+      response.cookies.set("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", //正式環境只允許在 HTTPS 傳輸 cookie
+        sameSite: "lax",
+        maxAge: JWT_EXPIRES,
+        path: "/happycoding",
+      });
+
+      return response;
     } else {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }

@@ -1,25 +1,36 @@
 "use client";
+import { useRouter } from "next/navigation";
+
 export default function Page() {
-  const handleSubmit = async (formData: FormData) => {
+  const router = useRouter();
+
+  const handleLogin = async (formData: FormData) => {
     const username = formData.get("username");
     const password = formData.get("password");
     const payload = {
       username,
       password,
     };
-    const data = await fetch("/auth/login", {
+
+    const res = await fetch("/api/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
-    console.log(data);
+
+    if (res.ok) {
+      // 導向 dashboard
+      router.push("/happycoding");
+    } else {
+      // 處理錯誤訊息
+    }
   };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
-        action={handleSubmit}
+        action={handleLogin}
         className="w-full max-w-md rounded-lg bg-white p-8 shadow-md"
       >
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
@@ -38,6 +49,7 @@ export default function Page() {
             name="username"
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             placeholder="Enter your username"
+            autoComplete="username"
           />
         </div>
         <div className="mb-6">
@@ -53,6 +65,7 @@ export default function Page() {
             name="password"
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             placeholder="Enter your password"
+            autoComplete="current-password"
           />
         </div>
         <button
