@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 // 取得所有標籤
 export async function GET() {
-  const categories = await prisma.tag.findMany({
+  const tags = await prisma.tag.findMany({
     orderBy: { name: "desc" },
   });
-  return NextResponse.json(categories);
+  return NextResponse.json(tags);
 }
 
 // 新增標籤
