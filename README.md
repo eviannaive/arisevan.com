@@ -1,4 +1,5 @@
-# Arisevan.com Project
+![Arisevan Logo](/public/common/logo_large.svg)
+# About This Project
 
 This project is a Next.js application designed to manage and display articles, featuring user authentication and image uploads to AWS S3.
 
