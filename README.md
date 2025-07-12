@@ -1,5 +1,5 @@
 ![Arisevan](/public/common/logo_large.svg)
-# Arisevan's Personal Blog Project
+# About
 
 This project is a personal blog built with Next.js, designed to manage and display articles. It features a custom backend for content management, accessible only to the blog owner, and integrates with AWS S3 for image uploads.
 
@@ -27,13 +27,12 @@ Follow these steps to set up and run the project locally.
 
 ## Project Structure
 
+-   `prisma/`: Prisma schema definition.
+-   `public/`: Static files served directly.
 -   `src/app/`: Next.js App Router pages and API routes.
     -   `(root)/`: Root level pages.
     -   `(dashboard)/`: Dashboard specific pages.
     -   `api/`: API endpoints.
 -   `src/assets/`: Static assets like global CSS.
 -   `src/components/`: Reusable React components.
--   `src/models/`: Mongoose models (if any, though Prisma is used for main models).
--   `src/utils/`: Utility functions.
--   `prisma/`: Prisma schema definition.
--   `public/`: Static files served directly.
+-   `src/lib/`: Utility functions.
