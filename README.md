@@ -1,7 +1,7 @@
-![Arisevan Logo](/public/common/logo_large.svg)
-# About This Project
+![Arisevan](/public/common/logo_large.svg)
+# Arisevan's Personal Blog Project
 
-This project is a Next.js application designed to manage and display articles, featuring user authentication and image uploads to AWS S3.
+This project is a personal blog built with Next.js, designed to manage and display articles. It features a custom backend for content management, accessible only to the blog owner, and integrates with AWS S3 for image uploads.
 
 ## Technologies Used
 
