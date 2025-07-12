@@ -1,5 +1,5 @@
 ![Arisevan](/public/common/logo_large.svg)
-# About
+## About
 
 This project is a personal blog built with Next.js, designed to manage and display articles. It features a custom backend for content management, accessible only to the blog owner, and integrates with AWS S3 for image uploads.
 
