@@ -30,7 +30,8 @@ export async function uploadFile(
   };
 
   try {
-    await s3Client.send(new PutObjectCommand(uploadParams));
+    const command = new PutObjectCommand(uploadParams);
+    await s3Client.send(command);
     const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileName}`;
     return fileUrl;
   } catch (error) {
