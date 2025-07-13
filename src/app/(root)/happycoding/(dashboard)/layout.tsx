@@ -1,49 +1,65 @@
+"use client";
+import { cn, capitalize } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ArrowRightCircleIcon } from "@heroicons/react/24/solid";
+
+const sidebar = [
+  {
+    name: "dashboard",
+    path: "/happycoding/dashboard",
+  },
+  {
+    name: "articles",
+    path: "/happycoding/articles",
+  },
+  {
+    name: "categories",
+    path: "/happycoding/categories",
+  },
+  {
+    name: "tags",
+    path: "/happycoding/tags",
+  },
+];
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathName = usePathname();
+  const unit = pathName.split("/")[2];
+  const detectUnit = (unitName: string) => {
+    return unitName === unit;
+  };
   return (
     <div className="flex">
       {/* Left Sidebar */}
-      <aside className="w-64 bg-white/70 p-6 shadow-md">
+      <aside className="w-58 bg-white/70 p-6 shadow-md">
         <nav>
-          <ul>
-            <li className="mb-4">
-              <Link
-                href="/happycoding/dashboard"
-                className="text-lg font-semibold hover:text-blue-800"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li className="mb-4">
-              <Link
-                href="/happycoding/dashboard/articles"
-                className="text-lg font-semibold text-blue-600 hover:text-blue-800"
-              >
-                Articles
-              </Link>
-            </li>
-            <li className="mb-4">
-              <Link
-                href="/happycoding/dashboard/categories"
-                className="text-lg font-semibold text-blue-600 hover:text-blue-800"
-              >
-                Categories
-              </Link>
-            </li>
-            <li className="mb-4">
-              <Link
-                href="/happycoding/dashboard/tags"
-                className="text-lg font-semibold text-blue-600 hover:text-blue-800"
-              >
-                Tags
-              </Link>
-            </li>
-            {/* Add more navigation links as needed */}
+          <ul className="text-large font-bold text-orange-600">
+            {sidebar.map((item) => (
+              <li key={item.name} className={cn("", detectUnit(item.name))}>
+                <Link href={item.path} className="flex items-center group">
+                  <div
+                    className={cn(
+                      "size-4 mr-2 font-bold transition-width overflow-hidden h-5",
+                      detectUnit(item.name) ? "w-5" : "w-0",
+                    )}
+                  >
+                    <ArrowRightCircleIcon
+                      className={cn("size-5 mr-2 font-bold")}
+                    />
+                  </div>
+
+                  <div className="py-2 flex-grow group-hover:text-orange-700 relative">
+                    {capitalize(item.name)}
+                    <div className="w-0 h-1 bg-orange-600 transition-width group-hover:w-full"></div>
+                  </div>
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </aside>

@@ -63,7 +63,7 @@ export default function CreateArticlePage() {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="w-full mx-auto">
       <h1 className="mb-6 text-3xl font-bold">Create New Article</h1>
 
       {message && (
@@ -91,6 +91,17 @@ export default function CreateArticlePage() {
             required
           />
         </div>
+        <div className="mb-4">
+          <label htmlFor="excerpt" className="block font-medium mb-1">
+            Excerpt (Optional)
+          </label>
+          <Textarea
+            id="excerpt"
+            rows={3}
+            value={excerpt}
+            onChange={(e) => setExcerpt(e.target.value)}
+          />
+        </div>
 
         <div className="mb-4">
           <label htmlFor="content" className="block font-medium mb-1">
@@ -102,18 +113,6 @@ export default function CreateArticlePage() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="excerpt" className="block font-medium mb-1">
-            Excerpt (Optional)
-          </label>
-          <Textarea
-            id="excerpt"
-            rows={3}
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
           />
         </div>
 
