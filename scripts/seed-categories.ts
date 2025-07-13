@@ -3,10 +3,11 @@ import { prisma } from "../src/lib/prisma"; // 調整成你的 prisma 實際位�
 import generateSlug from "../src/lib/generateSlug"; // 確保 generateSlug 存在
 
 const data_menu = [
-  { img: "/menu/js.svg", label: "Javascript" },
-  { img: "/menu/react.svg", label: "React" },
-  { img: "/menu/vue.svg", label: "Vue" },
-  { img: "/menu/workflow.svg", label: "Workflow" },
+  { image: "/menu/js.svg", label: "Javascript" },
+  { image: "/menu/react.svg", label: "React" },
+  { image: "/menu/vue.svg", label: "Vue" },
+  { image: "/menu/workflow.svg", label: "Workflow" },
+  { image: "/menu/database.png", label: "Backend Journey" },
 ];
 
 async function seedCategories() {
@@ -15,9 +16,10 @@ async function seedCategories() {
 
     await prisma.category.upsert({
       where: { name: item.label },
-      update: {},
+      update: { image: item.image },
       create: {
         name: item.label,
+        image: item.image,
         slug: generateSlug(item.label),
       },
     });

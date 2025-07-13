@@ -2,29 +2,30 @@
 import Nav from "@/components/layouts/Nav";
 import Image from "next/image";
 import { useState, useRef } from "react";
+import useSWR from "swr";
 
-const data_menu = [
-  {
-    img: "/menu/js.svg",
-    label: "Javascript",
-  },
-  {
-    img: "/menu/react.svg",
-    label: "React",
-  },
-  {
-    img: "/menu/vue.svg",
-    label: "Vue",
-  },
-  {
-    img: "/menu/workflow.svg",
-    label: "Workflow",
-  },
-  {
-    img: "/menu/fish.svg",
-    label: "Arisevan",
-  },
-];
+// const data_menu = [
+//   {
+//     img: "/menu/js.svg",
+//     label: "Javascript",
+//   },
+//   {
+//     img: "/menu/react.svg",
+//     label: "React",
+//   },
+//   {
+//     img: "/menu/vue.svg",
+//     label: "Vue",
+//   },
+//   {
+//     img: "/menu/workflow.svg",
+//     label: "Workflow",
+//   },
+//   {
+//     img: "/menu/fish.svg",
+//     label: "Arisevan",
+//   },
+// ];
 
 const data_sub = [
   { label: "sub1", route: "/sub1" },
@@ -46,6 +47,13 @@ export default function RootLayout({
     "Javascript/JavaScript 是一種腳本，也能稱它為程式語言，可以讓你在網頁中實現出複雜的功能。",
   );
   const [menuExpand, setMenuExpand] = useState(true);
+  const {
+    data: data_category,
+    error,
+    isLoading,
+  } = useSWR<Category[]>("/api/categories", () => {
+    return fetch("/api/categories").then((res) => res.json());
+  });
 
   return (
     <>
@@ -72,25 +80,30 @@ export default function RootLayout({
               </div>
               <div className="w-16 bg-gray-300 px-0.5 pt-0.5 shrink-0 relative z-10">
                 <div className="w-full grid grid-cols-1">
-                  {data_menu.map((d, index) => (
+                  {data_category?.map((d, index) => (
                     <label
                       key={index}
                       className="w-full p-2 bg-gray-100/60 grid place-content-center cursor-pointer  border-2 border-gray-300 hover:border-primary-800/80 hover:bg-white has-checked:bg-white"
                       onMouseEnter={() => {
                         setShowBreadCrumb(false);
-                        setHoverTextMain(`${d.label}`);
+                        setHoverTextMain(`${d.name}`);
                         setHoverTextSub("");
                       }}
                       onMouseLeave={() => {
                         setShowBreadCrumb(true);
                       }}
                     >
-                      <Image src={d.img} alt={d.label} width="50" height="50" />
+                      <Image
+                        src={d.image}
+                        alt={d.name}
+                        width="50"
+                        height="50"
+                      />
                       <input
                         type="radio"
                         className="hidden"
                         name="main"
-                        value={d.label}
+                        value={d.name}
                       ></input>
                     </label>
                   ))}
