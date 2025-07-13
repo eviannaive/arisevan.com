@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button, Checkbox } from "@heroui/react";
+import { Input, Textarea } from "@heroui/input";
 
 export default function CreateArticlePage() {
   const [title, setTitle] = useState("");
@@ -9,9 +11,9 @@ export default function CreateArticlePage() {
   const [excerpt, setExcerpt] = useState("");
   const [slug, setSlug] = useState("");
   const [published, setPublished] = useState(false);
-  const [coverImage, setCoverImage] = useState<string | null>(null);
-  const [categoryId, setCategoryId] = useState(""); // Placeholder
-  const [tags, setTags] = useState<string[]>([]); // Placeholder
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [categoryId, setCategoryId] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -19,11 +21,7 @@ export default function CreateArticlePage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCoverImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setCoverImage(file);
     }
   };
 
@@ -32,29 +30,28 @@ export default function CreateArticlePage() {
     setMessage(null);
     setError(null);
 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("excerpt", excerpt);
+    formData.append("slug", slug);
+    formData.append("published", String(published));
+    if (coverImage) {
+      formData.append("coverImage", coverImage);
+    }
+    formData.append("categoryId", categoryId);
+    formData.append("tags", tags.join(","));
+
     try {
       const response = await fetch("/api/articles", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          content,
-          excerpt,
-          published,
-          coverImage,
-          categoryId,
-          tags, // Assuming tags are an array of IDs
-        }),
+        body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
         setMessage("Article created successfully!");
-        // Optionally redirect or clear form
         // router.push(`/happycoding/dashboard/articles/${data.id}`);
-        // Redirect to article detail or list
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Failed to create article.");
@@ -83,16 +80,12 @@ export default function CreateArticlePage() {
         className="rounded-lg bg-white p-8 shadow-md"
       >
         <div className="mb-4">
-          <label
-            htmlFor="title"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="title" className="block font-medium mb-1">
             Title
           </label>
-          <input
+          <Input
             type="text"
             id="title"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -100,88 +93,62 @@ export default function CreateArticlePage() {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="content"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="content" className="block font-medium mb-1">
             Content
           </label>
-          <textarea
+          <Textarea
             id="content"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             rows={10}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
-          ></textarea>
+          />
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="excerpt"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="excerpt" className="block font-medium mb-1">
             Excerpt (Optional)
           </label>
-          <textarea
+          <Textarea
             id="excerpt"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             rows={3}
             value={excerpt}
             onChange={(e) => setExcerpt(e.target.value)}
-          ></textarea>
+          />
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="slug"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="slug" className="block font-medium mb-1">
             Slug (Optional - will be generated from title if empty)
           </label>
-          <input
+          <Input
             type="text"
             id="slug"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
           />
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="coverImage"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="coverImage" className="block font-medium mb-1">
             Cover Image (Upload)
           </label>
           <input
             type="file"
             id="coverImage"
             accept="image/*"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             onChange={handleFileChange}
+            className="block w-full"
           />
-          {coverImage && (
-            <img
-              src={coverImage}
-              alt="Cover Preview"
-              className="mt-4 h-32 w-32 object-cover"
-            />
-          )}
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="categoryId"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="categoryId" className="block font-medium mb-1">
             Category ID (Placeholder)
           </label>
-          <input
+          <Input
             type="text"
             id="categoryId"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             required
@@ -189,16 +156,12 @@ export default function CreateArticlePage() {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="tags"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
-            Tags (Comma-separated IDs - Placeholder)
+          <label htmlFor="tags" className="block font-medium mb-1">
+            Tags (Comma-separated names)
           </label>
-          <input
+          <Input
             type="text"
             id="tags"
-            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
             value={tags.join(",")}
             onChange={(e) =>
               setTags(e.target.value.split(",").map((tag) => tag.trim()))
@@ -207,27 +170,17 @@ export default function CreateArticlePage() {
         </div>
 
         <div className="mb-4 flex items-center">
-          <input
-            type="checkbox"
+          <Checkbox
             id="published"
-            className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
             checked={published}
             onChange={(e) => setPublished(e.target.checked)}
           />
-          <label
-            htmlFor="published"
-            className="text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="published" className="ml-2 font-medium">
             Published
           </label>
         </div>
 
-        <button
-          type="submit"
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Create Article
-        </button>
+        <Button type="submit">Create Article</Button>
       </form>
     </div>
   );

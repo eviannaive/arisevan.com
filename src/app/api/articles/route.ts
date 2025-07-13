@@ -1,118 +1,69 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import generateSlug from "@/lib/generateSlug";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { uploadFile } from "@/lib/uploadFile";
-import { parseForm } from "@/lib/parseForm";
-import { IncomingMessage } from "http";
-
-// const s3Client = new S3Client({
-//   region: process.env.AWS_S3_REGION,
-//   credentials: {
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-//   },
-// });
-
-// async function uploadFileToS3(
-//   fileBuffer: Buffer,
-//   fileName: string,
-//   contentType: string,
-// ) {
-//   const params = {
-//     Bucket: process.env.AWS_S3_BUCKET_NAME,
-//     Key: fileName,
-//     Body: fileBuffer,
-//     ContentType: contentType,
-//   };
-
-//   const command = new PutObjectCommand(params);
-//   await s3Client.send(command);
-//   return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileName}`;
-// }
 
 export async function POST(request: Request) {
-  const nodeReq = request as unknown as IncomingMessage;
-
   try {
-    // 解析表單欄位與檔案
-    const { fields, files } = await parseForm(nodeReq);
+    const formData = await request.formData();
 
-    const {
-      title,
-      content,
-      excerpt,
-      published,
-      coverImage: base64CoverImage,
-      categoryId,
-      tags,
-      slug: incomingSlug,
-    } = fields;
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const excerpt = formData.get("excerpt") as string | null;
+    const slug = (formData.get("slug") as string) || generateSlug(title);
+    const published = formData.get("published") === "true";
+    const categoryId = formData.get("categoryId") as string;
+    const tagsRaw = formData.get("tags") as string;
+    const tags = tagsRaw ? tagsRaw.split(",").map((t) => t.trim()) : [];
 
-    if (!title || !content || !categoryId) {
+    const file = formData.get("coverImage") as File | null;
+    let coverImageUrl: string | null = null;
+
+    if (typeof title !== "string") {
+      return NextResponse.json({ message: "Missing title" }, { status: 400 });
+    }
+    if (typeof content !== "string") {
+      return NextResponse.json({ message: "Missing content" }, { status: 400 });
+    }
+    if (typeof categoryId !== "string") {
       return NextResponse.json(
-        { message: "Missing required fields" },
+        { message: "Missing categoryId" },
         { status: 400 },
       );
     }
 
-    let coverImageUrl: string | null = null;
-    if (base64CoverImage) {
-      const matches = String(base64CoverImage).match(/^data:(.+);base64,(.+)$/);
-      if (matches && matches.length === 3) {
-        const contentType = matches[1];
-        const base64Data = matches[2];
-        const fileBuffer = Buffer.from(base64Data, "base64");
-        const fileName = `covers/${Date.now()}-${Math.random().toString(36).slice(2)}`;
-        coverImageUrl = await uploadFile(fileBuffer, fileName, contentType);
-      } else {
-        return NextResponse.json(
-          { message: "Invalid cover image format" },
-          { status: 400 },
-        );
-      }
+    if (file && file.size > 0) {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      coverImageUrl = await uploadFile(buffer, file.name, "covers");
     }
 
-    // 處理 title 可能為陣列或字串
-    const safeTitle = Array.isArray(title) ? title.join("") : title || "";
-
-    // slug 沒傳就用 generateSlug
-    const slug = incomingSlug || generateSlug(safeTitle);
-
-    // tags 可能是字串或字串陣列，統一成陣列
-    const tagNames = Array.isArray(tags) ? tags : [tags];
-    // 先查詢這些 tag 的紀錄
+    // 找到已存在的 tag
     const tagRecords = await prisma.tag.findMany({
-      where: {
-        name: { in: tagNames },
-      },
+      where: { name: { in: tags } },
     });
 
     const newPost = await prisma.post.create({
       data: {
         title,
         content,
-        excerpt,
+        excerpt: excerpt || "",
         slug,
-        published: published || false,
+        published,
         coverImage: coverImageUrl,
         category: {
           connect: { id: categoryId },
         },
         tags: {
-          create: tagRecords.map((tag: { id: string }) => ({
-            tag: {
-              connect: { id: tag.id },
-            },
+          create: tagRecords.map((tag: Tag) => ({
+            tag: { connect: { id: tag.id } },
           })),
         },
       },
       include: {
         category: true,
         tags: {
-          include: {
-            tag: true,
-          },
+          include: { tag: true },
         },
       },
     });

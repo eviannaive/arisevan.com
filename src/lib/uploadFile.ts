@@ -20,7 +20,10 @@ export async function uploadFile(
   fileName: string,
   folder?: string,
 ): Promise<string> {
-  const key = folder ? `${folder}/${fileName}` : fileName;
+  const cleanFileName = fileName.replace(/\s+/g, "-").toLowerCase();
+  const key = folder
+    ? `${folder}/${Date.now()}-${cleanFileName}`
+    : `${Date.now()}-${cleanFileName}`;
 
   const uploadParams = {
     Bucket: process.env.AWS_S3_BUCKET_NAME!,
