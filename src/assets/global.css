@@ -8,6 +8,18 @@
   --header-height: 85px;
   --content-height: calc(100vh - var(--haader-height));
   --menu-width: 300px;
+  /* hero ui */
+  --heroui-secondary: 236.98 36% 54%;
+  --heroui-secondary-100: 236.98 36% 95%;
+  --heroui-secondary-200: 236.98 36% 88%;
+  --heroui-secondary-300: 236.98 36% 76%;
+  --heroui-secondary-400: 236.98 36% 65%;
+  --heroui-secondary-500: 236.98 36% 54%; /* base */
+  --heroui-secondary-600: 236.98 36% 44%;
+  --heroui-secondary-700: 236.98 36% 34%;
+  --heroui-secondary-800: 236.98 36% 24%;
+  --heroui-secondary-900: 236.98 36% 14%;
+  --heroui-radius-medium: 4px;
 }
 
 @theme inline {

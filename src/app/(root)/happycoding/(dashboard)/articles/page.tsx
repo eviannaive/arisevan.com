@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox } from "@heroui/react";
 import { Input, Textarea } from "@heroui/input";
+import { Select, SelectSection, SelectItem } from "@heroui/select";
+import useSWR from "swr";
+import Image from "next/image";
 
 export default function CreateArticlePage() {
   const [title, setTitle] = useState("");
@@ -17,6 +20,13 @@ export default function CreateArticlePage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const { data: data_category, isLoading } = useSWR<Category[]>(
+    "/api/categories",
+    () => {
+      return fetch("/api/categories").then((res) => res.json());
+    },
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -64,8 +74,7 @@ export default function CreateArticlePage() {
 
   return (
     <div className="w-full mx-auto">
-      <h1 className="mb-6 text-3xl font-bold">Create New Article</h1>
-
+      <div className="mb-6 text-3xl font-bold">Create New Article</div>
       {message && (
         <div className="mb-4 rounded bg-green-100 p-3 text-green-700">
           {message}
@@ -77,7 +86,7 @@ export default function CreateArticlePage() {
 
       <form
         onSubmit={handleSubmit}
-        className="rounded-lg bg-white p-8 shadow-md"
+        className="rounded-xs bg-white p-8 shadow-md"
       >
         <div className="mb-4">
           <label htmlFor="title" className="block font-medium mb-1">
@@ -145,13 +154,33 @@ export default function CreateArticlePage() {
           <label htmlFor="categoryId" className="block font-medium mb-1">
             Category ID (Placeholder)
           </label>
-          <Input
-            type="text"
-            id="categoryId"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-          />
+          {data_category?.length && (
+            <Select
+              aria-label="Category"
+              startContent={""}
+              onSelectionChange={(keys) => {
+                const selectedKey = Array.from(keys)[0]; // 取第一個 key
+                setCategoryId(String(selectedKey));
+              }}
+            >
+              {data_category.map((item) => (
+                <SelectItem
+                  key={item.id}
+                  startContent={
+                    <Image
+                      alt="Argentina"
+                      className="w-6 h-6"
+                      width={20}
+                      height={20}
+                      src={item.image}
+                    />
+                  }
+                >
+                  {item.name}
+                </SelectItem>
+              ))}
+            </Select>
+          )}
         </div>
 
         <div className="mb-4">

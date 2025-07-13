@@ -33,18 +33,19 @@ export default function DashboardLayout({
   const detectUnit = (unitName: string) => {
     return unitName === unit;
   };
+
   return (
     <div className="flex">
       {/* Left Sidebar */}
-      <aside className="w-58 bg-white/70 p-6 shadow-md">
-        <nav>
-          <ul className="text-large font-bold text-orange-600">
+      <aside className="w-58 bg-white/70 p-6 shadow-md rounded-xs">
+        <nav className="sticky top-10">
+          <ul className="text-large font-bold text-secondary-600">
             {sidebar.map((item) => (
               <li key={item.name} className={cn("", detectUnit(item.name))}>
-                <Link href={item.path} className="flex items-center group">
+                <Link href={item.path} className="flex group">
                   <div
                     className={cn(
-                      "size-4 mr-2 font-bold transition-width overflow-hidden h-5",
+                      "size-4 mt-3 mr-2 font-bold transition-width overflow-hidden h-5",
                       detectUnit(item.name) ? "w-5" : "w-0",
                     )}
                   >
@@ -53,9 +54,9 @@ export default function DashboardLayout({
                     />
                   </div>
 
-                  <div className="py-2 flex-grow group-hover:text-orange-700 relative">
+                  <div className="py-2 flex-grow group-hover:text-secondary-700 relative">
                     {capitalize(item.name)}
-                    <div className="w-0 h-1 bg-orange-600 transition-width group-hover:w-full"></div>
+                    <div className="w-0 h-1 bg-secondary-300 transition-width group-hover:w-full"></div>
                   </div>
                 </Link>
               </li>

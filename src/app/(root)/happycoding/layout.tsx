@@ -1,3 +1,4 @@
+import { Button } from "@heroui/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,8 +15,9 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="px-4">
-      <header className="py-6 border-b">
-        <h1 className="text-2xl font-bold">Arisevan Blog Dashboard Site</h1>
+      <header className="py-6 border-b flex items-center justify-between">
+        <div className="text-2xl font-bold">Arisevan Blog Dashboard Site</div>
+        <Button color="secondary">Logout</Button>
       </header>
       <main className="py-8">{children}</main>
       <footer className="py-6 border-t">
