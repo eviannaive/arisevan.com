@@ -17,7 +17,9 @@ export default function DashboardLayout({
     <div className="px-4">
       <header className="py-6 border-b flex items-center justify-between">
         <div className="text-2xl font-bold">Arisevan Blog Dashboard Site</div>
-        <Button color="secondary">Logout</Button>
+        <Button color="secondary" radius="full">
+          Logout
+        </Button>
       </header>
       <main className="py-8">{children}</main>
       <footer className="py-6 border-t">
