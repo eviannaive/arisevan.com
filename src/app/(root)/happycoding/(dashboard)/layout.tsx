@@ -37,8 +37,8 @@ export default function DashboardLayout({
   return (
     <div className="flex">
       {/* Left Sidebar */}
-      <aside className="w-58 bg-white/70 p-6 shadow-md rounded-xs">
-        <nav className="sticky top-10">
+      <aside className="w-58">
+        <nav className="sticky top-10  p-6 bg-white/70 shadow-md rounded-xs">
           <ul className="text-large font-bold text-secondary-600">
             {sidebar.map((item) => (
               <li key={item.name} className={cn("", detectUnit(item.name))}>

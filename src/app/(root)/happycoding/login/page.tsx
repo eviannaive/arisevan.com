@@ -22,7 +22,7 @@ export default function Page() {
 
     if (res.ok) {
       // 導向 dashboard
-      router.push("/happycoding");
+      router.push("/happycoding/dashboard");
     } else {
       // 處理錯誤訊息
     }
@@ -50,6 +50,7 @@ export default function Page() {
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             placeholder="Enter your username"
             autoComplete="username"
+            defaultValue={process.env.NEXT_PUBLIC_USER}
           />
         </div>
         <div className="mb-6">
@@ -66,6 +67,7 @@ export default function Page() {
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             placeholder="Enter your password"
             autoComplete="current-password"
+            defaultValue={process.env.NEXT_PUBLIC_PASSWORD}
           />
         </div>
         <button

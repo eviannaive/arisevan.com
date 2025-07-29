@@ -20,6 +20,7 @@
   --heroui-secondary-800: 236.98 36% 24%;
   --heroui-secondary-900: 236.98 36% 14%;
   --heroui-radius-medium: 4px;
+  --background: white;
 }
 
 @theme inline {
@@ -37,17 +38,23 @@
   --shadow-float: 2px 3px 0px rgba(204, 104, 59, 0.8);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  .bgimg {
+    mix-blend-mode: soft-light;
   }
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
+  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  .bgimg {
+    background-image: url(/common/bg.svg);
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {

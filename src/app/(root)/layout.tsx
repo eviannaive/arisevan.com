@@ -28,8 +28,8 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${silkscreen.variable} antialiased`}
       >
-        <div className="fixed top-0 left-0 z-[-1] w-screen h-screen bg-[url(/common/bg.svg)]"></div>
-        {children}
+        <div className="bgimg fixed top-0 left-0 z-1 w-screen h-screen"></div>
+        <div className="relative z-2">{children}</div>
       </body>
     </html>
   );
